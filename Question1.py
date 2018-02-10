@@ -41,8 +41,8 @@ while percentError > 1: #loop until wanted %error
     percentError = (abs(dist-endx)/endx)*100
 
 
-print("ending x value: ", endx)
-print("Actual x value: ", dist)
+print("Numerical distance: ", dist)
+print("Analytical distance: ", endx)
 print("step size: ", dt)
 print("number of steps: ", steps)
 print("percent error of distance: ", percentError)
