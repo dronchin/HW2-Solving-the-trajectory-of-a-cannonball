@@ -13,11 +13,16 @@ def dismidpoint(x, t, dt, v0 ,a):
 percentError = 10
 
 #starting dt
-dt_change = 0.01
-dt = 5 + dt_change
+dt_change = 0.1
+dt = 2 + dt_change
+errors = []
+steplist = []
 while percentError > 1: #loop until wanted %error
     #reset all intial variables
     dt -= dt_change #shanges dt
+    if dt < 0.00000001:
+        dt += dt_change
+        break
     x = 0
     y = 0
     v = 100
@@ -36,17 +41,17 @@ while percentError > 1: #loop until wanted %error
     while y >= 0:
         steps += 1 #saves number of steps
         #updates position
-        xold = x
-        yold = y
         x = dismidpoint(x, t, dt, vx ,ax)
         y = dismidpoint(y, t, dt, vy ,ay)
-        time += dt
+        t += dt
         xes.append(x)
         yes.append(y)
 
     #distance calculated using pythagorean theorem
     dist = np.sqrt((x)**2+(y)**2)
     percentError = (abs(dist-endx)/endx)*100
+    steplist.append(steps)
+    errors.append(percentError)
 
 
 print("Numerical distance: ", dist)
@@ -54,5 +59,5 @@ print("Analytical distance: ", endx)
 print("step size: ", dt)
 print("number of steps: ", steps)
 print("percent error of distance: ", percentError)
-plt.plot(xes,yes)
+plt.plot(xes, yes)
 plt.show()
