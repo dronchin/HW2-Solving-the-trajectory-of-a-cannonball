@@ -9,6 +9,9 @@ def dismidpoint(x, t, dt, v0 ,a):
     k2 = dt*vfunc(v0, a, t+dt/2)
     return x+k2
 
+RAD_cm = 10
+DENS_ball = 11.34 #g/cm^3
+Mass = (3./4.)*np.pi*RAD_cm**2*DENS_ball*0.001 #mass in kg
 
 percentError = 10
 
@@ -27,7 +30,7 @@ while percentError > 1: #loop until wanted %error
     y = 0
     v = 100
     ax = 0
-    ay = -9.8
+    ay = -9.8/Mass
     th = 40/180*np.pi
     vx = v*np.cos(th)
     vy = v*np.sin(th)

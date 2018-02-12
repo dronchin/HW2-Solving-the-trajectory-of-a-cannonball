@@ -5,6 +5,10 @@ def Euler(x, dx, dt):
     return x + dt*dx
 percentError = 10
 
+RAD_cm = 10
+DENS_ball = 11.34 #g/cm^3
+Mass = (3./4.)*np.pi*RAD_cm**2*DENS_ball*0.001 #mass in kg
+
 #starting dt
 dt_change = 0.01
 dt = 5 + dt_change
@@ -15,7 +19,7 @@ while percentError > 1: #loop until wanted %error
     y = 0
     v = 100
     ax = 0
-    ay = -9.8
+    ay = -9.8/Mass
     th = 40/180*np.pi
     vx = v*np.cos(th)
     vy = v*np.sin(th)
