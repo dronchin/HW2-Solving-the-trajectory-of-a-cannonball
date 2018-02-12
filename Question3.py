@@ -20,8 +20,8 @@ def Fair(velocity, C=C, DENS_air=DENS_air, Area=Area):
         return 0.5*C*DENS_air*Area*velocity**2
 
 #starting dt
-dt_change = 0.01
-dt = 0.1 + dt_change
+dt_change = 0.001
+dt = 0.01 + dt_change
 old_dist = 1000000
 percentError = 10
 while percentError > 1: #loop until wanted %error
@@ -50,8 +50,8 @@ while percentError > 1: #loop until wanted %error
         y = Euler(y, vy, dt)
 
         #updates forces and acceleration
-        Fx = Fair(C, DENS_air, Area, vx)
-        Fy = -Fair(C, DENS_air, Area, vy) - 9.81
+        Fx = Fair(vx)
+        Fy = Fair(vy) - 9.81
         ax = Fx/Mass
         ay = Fy/Mass
 

@@ -1,15 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def vfunc(v0, a, t):
-    return v0 + a*t
-
-def dismidpoint(x, t, dt, v0 ,a):
-    k1 = dt*vfunc(v0,a,t)
-    k2 = dt*vfunc(v0, a, t+dt/2)
-    return x+k2
-
-
 RAD_cm = 10
 RAD_m = 0.1
 DENS_ball = 11.34 #g/cm^3
@@ -25,9 +16,31 @@ def Fair(velocity, C=C, DENS_air=DENS_air, Area=Area):
     if velocity < 0:
         return 0.5*C*DENS_air*Area*velocity**2
 
+def accelxf(t,v):
+    return (Fair(v))/Mass
+def accelyf(t,v):
+    return (Fair(v)-9.81)/Mass
+
+def velocityxf(t,x,curvx):
+    v = midpoint2(accelxf, curvx, t,dt)
+    return v
+def velocityyf(t,x,curvy):
+    v = midpoint2(accelyf, curvy, t,dt)
+    return v
+
+def midpoint(f, x, t, dt,curv):
+    k1 = dt*f(t,x,curv)
+    k2 = dt*f(t+dt/2, x+k1/2, curv)
+    return x+k2
+def midpoint2(f, x, t, dt):
+    k1 = dt*f(t,x)
+    k2 = dt*f(t+dt/2, x+k1/2)
+    return x+k2
+
+
 #starting dt
-dt_change = 0.01
-dt = 0.1 + dt_change
+dt_change = 0.001
+dt = 0.01 + dt_change
 old_dist = 1000000
 percentError = 10
 while percentError > 1: #loop until wanted %error
@@ -42,24 +55,18 @@ while percentError > 1: #loop until wanted %error
     ax = Fair(vx)/Mass
     ay = (Fair(vy) - 9.81)/Mass
     steps = 0
+    t = 0
     #saves coordinates for graphing
     xes = [0]
     yes = [0]
     while y >= 0:
         steps += 1 #saves number of steps
-        #updates velocity
-        vx = Euler(vx, ax, dt)
-        vy = Euler(vy, ay, dt)
+        vx = midpoint2(accelxf, vx, t, dt)
+        x = midpoint(velocityxf, x, t, dt, vx)
+        vy = midpoint2(accelyf, vy, t, dt)
+        y = midpoint(velocityyf, y, t, dt, vy)
 
-        #updates position
-        x = Euler(x, vx, dt)
-        y = Euler(y, vy, dt)
-
-        #updates forces and acceleration
-        Fx = Fair(C, DENS_air, Area, vx)
-        Fy = -Fair(C, DENS_air, Area, vy) - 9.81
-        ax = Fx/Mass
-        ay = Fy/Mass
+        t += dt
 
         xes.append(x)
         yes.append(y)
