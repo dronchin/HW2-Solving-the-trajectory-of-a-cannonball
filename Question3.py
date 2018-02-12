@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 #Euler method function
 def Euler(x, dx, dt):
     return x + dt*dx
-percentError = 10
+
 RAD_cm = 10
 RAD_m = 0.1
 DENS_ball = 11.34 #g/cm^3
@@ -23,6 +23,7 @@ def Fair(velocity, C=C, DENS_air=DENS_air, Area=Area):
 dt_change = 0.01
 dt = 0.1 + dt_change
 old_dist = 1000000
+percentError = 10
 while percentError > 1: #loop until wanted %error
     #reset all intial variables
     dt -= dt_change #shanges dt
